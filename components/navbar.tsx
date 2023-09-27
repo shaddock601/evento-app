@@ -6,8 +6,10 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import { Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 const Navbar = () => {
   const { isSignedIn } = useAuth();
@@ -20,11 +22,19 @@ const Navbar = () => {
         </div>
       </Link>
       <div className="hidden md:inline-flex">
-        <Button size="icon">
-          <Plus />
-        </Button>
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="outline" size="icon" className="text-primary border-primary border-2 transition ease-in-out delay-150 hover:text-white hover:bg-primary hover:scale-110 duration-300">
+              <Plus />
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent className="text-primary text-sm font-bold w-auto">
+            Add your event
+          </HoverCardContent>
+        </HoverCard>
       </div>
       <div className="items-center space-x-3 hidden md:inline-flex">
+        <ModeToggle />
         <div className={cn("space-x-3", isSignedIn ? "hidden" : "inline-flex")}>
           <Link href="/sign-in">
             <Button variant="outline" size="sm">
