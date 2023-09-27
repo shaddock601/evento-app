@@ -5,14 +5,31 @@ import Image from "next/image";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
+import MobileNav from "@/components/mobile-nav";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
 const Navbar = () => {
   const { isSignedIn } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
+  const closeSheet = () => {
+    setOpen(false);
+  };
 
   return (
     <div className="flex items-center justify-between px-8 py-2 border-b">
@@ -47,8 +64,13 @@ const Navbar = () => {
         </div>
         <UserButton afterSignOutUrl="/" />
       </div>
-      <div className="md:hidden">
-        <Menu className="text-primary" />
+      <div className="flex items-center md:hidden">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger>
+            <Menu className="text-primary" />
+          </SheetTrigger>
+          <MobileNav closeSheet={closeSheet} />
+        </Sheet>
       </div>
     </div>
   );
