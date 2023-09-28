@@ -10,7 +10,11 @@ import { useEffect, useState } from "react";
 import MobileNav from "@/components/mobile-nav";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
@@ -41,7 +45,11 @@ const Navbar = () => {
       <div className="hidden md:inline-flex">
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Button variant="outline" size="icon" className="text-primary border-primary border-2 transition ease-in-out delay-150 hover:text-white hover:bg-primary hover:scale-110 duration-300">
+            <Button
+              variant="outline"
+              size="icon"
+              className="text-primary border-primary border-2 transition ease-in-out delay-150 hover:text-white hover:bg-primary hover:scale-110 duration-300"
+            >
               <Plus />
             </Button>
           </HoverCardTrigger>
@@ -52,6 +60,7 @@ const Navbar = () => {
       </div>
       <div className="items-center space-x-3 hidden md:inline-flex">
         <ModeToggle />
+        <UserButton afterSignOutUrl="/" />
         <div className={cn("space-x-3", isSignedIn ? "hidden" : "inline-flex")}>
           <Link href="/sign-in">
             <Button variant="outline" size="sm">
@@ -62,10 +71,24 @@ const Navbar = () => {
             <Button size="sm">Register</Button>
           </Link>
         </div>
-        <UserButton afterSignOutUrl="/" />
       </div>
       <div className="flex items-center md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
+          <div className="flex items-center mr-3">
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <Link href="/sign-in">
+                <Button
+                  variant="outline"
+                  className="hover:text-white hover:bg-primary transition ease-in-out delay-150 duration-300"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
+
           <SheetTrigger>
             <Menu className="text-primary" />
           </SheetTrigger>
