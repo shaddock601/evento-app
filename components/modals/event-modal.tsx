@@ -1,6 +1,8 @@
 "use client";
 
 import * as z from "zod";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -25,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "../date-picker";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -39,6 +42,7 @@ const EventModal = () => {
 
   const [loading, setLoading] = useState(false);
   const [isLimit, setIsLimit] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,12 +58,19 @@ const EventModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      console.log(values);
-    } catch (error) {
-      console.log("Something went wrong!");
+      const data = {
+        date: currentDate,
+        ...values,
+      };
+
+      await axios.post(`/api/events`, data);
+      toast.success("Event created");
+    } catch (error: any) {
+      toast.error("Something went wrong!", error);
     } finally {
       setLoading(false);
       form.reset();
+      eventModal.onClose();
     }
   };
 
@@ -70,6 +81,9 @@ const EventModal = () => {
       isOpen={eventModal.isOpen}
       onClose={eventModal.onClose}
     >
+      <div className="my-3">
+        <DatePicker currentDate={currentDate} onDateSelected={setCurrentDate} />
+      </div>
       <div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -142,9 +156,11 @@ const EventModal = () => {
                         <Select
                           onValueChange={(newValue) => {
                             if (newValue === "true") {
+                              form.setValue("is_limit", true);
                               setIsLimit(true);
                             }
                             if (newValue === "false") {
+                              form.setValue("is_limit", false);
                               setIsLimit(false);
                             }
                           }}
