@@ -9,6 +9,8 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "./ui/separator";
 import { useEventModal } from "@/hooks/use-event-modal";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   closeSheet: () => void;
@@ -16,6 +18,17 @@ interface SidebarProps {
 
 const MobileNav = ({ closeSheet }: SidebarProps) => {
   const eventModal = useEventModal();
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  const handleCreateEvent = () => {
+    if (isSignedIn) {
+      eventModal.onOpen();
+    } else {
+      router.push("/sign-in");
+    }
+  };
+
   return (
     <SheetContent className="flex flex-col h-full">
       <SheetHeader>
@@ -35,12 +48,12 @@ const MobileNav = ({ closeSheet }: SidebarProps) => {
         <Button
           className="w-full my-4"
           onClick={() => {
-            eventModal.onOpen();
+            handleCreateEvent();
             closeSheet();
           }}
         >
           <div className="flex items-center">
-            Add Event
+            Create Event
             <Plus className="ml-2" />
           </div>
         </Button>

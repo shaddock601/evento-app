@@ -6,6 +6,7 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import MobileNav from "@/components/mobile-nav";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,8 @@ import { useEventModal } from "@/hooks/use-event-modal";
 const Navbar = () => {
   const { isSignedIn } = useAuth();
   const eventModal = useEventModal();
+  const router = useRouter();
+
   const [isMounted, setIsMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -35,6 +38,14 @@ const Navbar = () => {
 
   const closeSheet = () => {
     setOpen(false);
+  };
+
+  const handleCreateEvent = () => {
+    if (isSignedIn) {
+      eventModal.onOpen();
+    } else {
+      router.push("/sign-in");
+    }
   };
 
   return (
@@ -51,13 +62,13 @@ const Navbar = () => {
               variant="outline"
               size="icon"
               className="text-primary border-primary border-2 transition ease-in-out delay-150 hover:text-white hover:bg-primary hover:scale-110 duration-300"
-              onClick={() => eventModal.onOpen()}
+              onClick={() => handleCreateEvent()}
             >
               <Plus />
             </Button>
           </HoverCardTrigger>
           <HoverCardContent className="text-primary text-sm font-bold w-auto">
-            Add your event
+            Create your event
           </HoverCardContent>
         </HoverCard>
       </div>
