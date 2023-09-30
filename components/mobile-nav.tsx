@@ -8,12 +8,14 @@ import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "./ui/separator";
+import { useEventModal } from "@/hooks/use-event-modal";
 
 interface SidebarProps {
   closeSheet: () => void;
 }
 
 const MobileNav = ({ closeSheet }: SidebarProps) => {
+  const eventModal = useEventModal();
   return (
     <SheetContent className="flex flex-col h-full">
       <SheetHeader>
@@ -30,7 +32,13 @@ const MobileNav = ({ closeSheet }: SidebarProps) => {
       </SheetHeader>
       <Separator />
       <div className="flex-grow">
-        <Button className="w-full my-4" onClick={() => closeSheet()}>
+        <Button
+          className="w-full my-4"
+          onClick={() => {
+            eventModal.onOpen();
+            closeSheet();
+          }}
+        >
           <div className="flex items-center">
             Add Event
             <Plus className="ml-2" />

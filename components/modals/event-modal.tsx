@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -24,14 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   location: z.string().min(1),
   is_limit: z.boolean(),
-  max_people: z.any(),
+  max_people: z.number().nonnegative(),
 });
 
 const EventModal = () => {
@@ -47,17 +47,19 @@ const EventModal = () => {
       description: "",
       location: "",
       is_limit: false,
+      max_people: 0,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
+      console.log(values);
     } catch (error) {
       console.log("Something went wrong!");
     } finally {
       setLoading(false);
-      eventModal.onClose();
+      form.reset();
     }
   };
 

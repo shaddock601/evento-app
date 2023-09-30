@@ -17,9 +17,11 @@ import {
 } from "@/components/ui/hover-card";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { useEventModal } from "@/hooks/use-event-modal";
 
 const Navbar = () => {
   const { isSignedIn } = useAuth();
+  const eventModal = useEventModal();
   const [isMounted, setIsMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -49,6 +51,7 @@ const Navbar = () => {
               variant="outline"
               size="icon"
               className="text-primary border-primary border-2 transition ease-in-out delay-150 hover:text-white hover:bg-primary hover:scale-110 duration-300"
+              onClick={() => eventModal.onOpen()}
             >
               <Plus />
             </Button>
