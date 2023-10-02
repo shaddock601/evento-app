@@ -28,6 +28,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "../date-picker";
+import { Label } from "../ui/label";
+
+//TODO: add specific time for event
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -74,6 +77,17 @@ const EventModal = () => {
     }
   };
 
+  const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    const hours = Number.parseInt(value.split(":")[0] || "00", 10);
+    const minutes = Number.parseInt(value.split(":")[1] || "00", 10);
+    const newDate = new Date(currentDate);
+    newDate.setHours(hours, minutes);
+    setCurrentDate(newDate);
+  };
+
+  console.log(currentDate);
+
   return (
     <Modal
       title="Create Event"
@@ -81,8 +95,13 @@ const EventModal = () => {
       isOpen={eventModal.isOpen}
       onClose={eventModal.onClose}
     >
-      <div className="my-3">
+      <div className="my-3 items-center sm:flex sm:space-x-2">
         <DatePicker currentDate={currentDate} onDateSelected={setCurrentDate} />
+        <Input
+          type="time"
+          onChange={handleTimeChange}
+          className="mt-2 sm:mt-0"
+        />
       </div>
       <div>
         <Form {...form}>
