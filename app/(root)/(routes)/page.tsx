@@ -1,6 +1,6 @@
+import { auth } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 import EventList from "../_components/event-list";
-import { auth } from "@clerk/nextjs";
 
 export default async function Home() {
   const events = await prismadb.event.findMany();

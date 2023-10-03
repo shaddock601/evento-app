@@ -28,9 +28,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "../date-picker";
-import { Label } from "../ui/label";
-
-//TODO: add specific time for event
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -77,6 +74,7 @@ const EventModal = () => {
     }
   };
 
+  //TODO: Still has a problem when select date after time. The time will reset
   const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value } = e.target;
     const hours = Number.parseInt(value.split(":")[0] || "00", 10);
@@ -85,8 +83,6 @@ const EventModal = () => {
     newDate.setHours(hours, minutes);
     setCurrentDate(newDate);
   };
-
-  console.log(currentDate);
 
   return (
     <Modal
