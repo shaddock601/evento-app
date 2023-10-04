@@ -14,7 +14,7 @@ model User {
   imageUrl String @db.Text
   email    String @db.Text
 
-  Event Event[] @relation("ProfileToEvent")
+  Event Event[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,7 +30,7 @@ model Event {
   date        DateTime
 
   userId String
-  user   User   @relation("ProfileToEvent", fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -3,7 +3,11 @@ import prismadb from "@/lib/prismadb";
 import EventList from "../_components/event-list";
 
 export default async function Home() {
-  const events = await prismadb.event.findMany();
+  const events = await prismadb.event.findMany({
+    include: {
+      user: true,
+    },
+  });
   const { userId } = auth();
 
   return (
