@@ -8,9 +8,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Profile {
-  id       String @id @default(uuid())
-  userId   String @unique
+model User {
+  id       String @unique
   name     String
   imageUrl String @db.Text
   email    String @db.Text
@@ -30,11 +29,11 @@ model Event {
   max_people  Int?
   date        DateTime
 
-  profileId String
-  profile   Profile @relation("ProfileToEvent", fields: [profileId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation("ProfileToEvent", fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
+  @@index([userId])
 }

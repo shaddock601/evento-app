@@ -56,12 +56,12 @@ export async function POST(req: Request) {
     const { first_name, last_name, image_url, email_addresses } = evt.data;
     const name = first_name + " " + last_name;
     const email = email_addresses[0].email_address;
-    await prismadb.profile.upsert({
+    await prismadb.user.upsert({
       where: {
-        userId: id,
+        id,
       },
       create: {
-        userId: id as string,
+        id: id as string,
         name,
         email,
         imageUrl: image_url,
@@ -75,9 +75,9 @@ export async function POST(req: Request) {
   }
 
   if (eventType === "user.deleted") {
-    await prismadb.profile.delete({
+    await prismadb.user.delete({
       where: {
-        userId: id
+        id
       }
     })
   }

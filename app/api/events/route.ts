@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
         const event = await prismadb.event.create({
             data: {
-                profileId: userId,
+                userId,
                 name,
                 description,
                 location,

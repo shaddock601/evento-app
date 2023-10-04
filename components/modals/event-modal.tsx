@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "../date-picker";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -39,6 +40,7 @@ const formSchema = z.object({
 
 const EventModal = () => {
   const eventModal = useEventModal();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [isLimit, setIsLimit] = useState(false);
@@ -71,6 +73,7 @@ const EventModal = () => {
       setLoading(false);
       form.reset();
       eventModal.onClose();
+      router.refresh();
     }
   };
 
