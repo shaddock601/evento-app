@@ -22,6 +22,7 @@ import {
   HoverCard,
   HoverCardContent,
 } from "@/components/ui/hover-card";
+import { Separator } from "@/components/ui/separator";
 
 type EventWithUser = Event & {
   user: User;
@@ -54,9 +55,9 @@ const EventList = ({ events, userId }: EventListProps) => {
   }
 
   return (
-    <div className="space-y-3 w-full sm:w-[640px]">
+    <div className="space-y-4 w-full sm:w-[640px]">
       {events.map((event) => (
-        <Card className="hover:shadow-xl hover:border-primary">
+        <Card className="p-0 md:px-3 flex flex-col hover:shadow-xl hover:transition hover:delay-150 hover:duration-300">
           <CardHeader>
             <CardTitle className="items-center space-y-3">
               <div className="flex items-center text-xs text-muted-foreground space-x-3">
@@ -70,7 +71,7 @@ const EventList = ({ events, userId }: EventListProps) => {
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <div className="cursor-pointer hover:text-primary">
+                <div className="cursor-pointer font-bold font-sans hover:text-primary">
                   {event.name}
                 </div>
                 <div>
@@ -81,7 +82,7 @@ const EventList = ({ events, userId }: EventListProps) => {
                         width={6}
                         height={6}
                         alt="user logo"
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white cursor-pointer hover:ring-primary"
+                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white cursor-pointer hover:ring-primary ml-2"
                         unoptimized
                       />
                     </HoverCardTrigger>
@@ -105,12 +106,13 @@ const EventList = ({ events, userId }: EventListProps) => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p>{event.description}</p>
+            <p className="line-clamp-3 font-light">{event.description}</p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">
-            <div>User icon</div>
-            <Button size="sm" onClick={() => AttendEvent()}>
-              Attend
+            <div>Attendant icon</div>
+            <Button className="before:ease relative overflow-hidden border border-primary bg-primary text-white shadow-sm transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-primary hover:before:-translate-x-40"
+              onClick={() => AttendEvent()}>
+              <span className="relative z-10">Attend</span>
             </Button>
           </CardFooter>
         </Card>

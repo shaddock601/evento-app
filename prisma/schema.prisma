@@ -22,9 +22,9 @@ model User {
 
 model Event {
   id          String   @id @default(uuid())
-  name        String
-  description String
-  location    String
+  name        String   @db.Text
+  description String   @db.LongText
+  location    String   @db.Text
   is_limit    Boolean
   max_people  Int?
   date        DateTime
