@@ -41,6 +41,7 @@ const EventList = ({ events, userId }: EventListProps) => {
     }
     console.log("Attended");
   };
+
   return (
     <div className="space-y-3 w-full sm:w-[640px]">
       {events.map((event) => (
@@ -68,7 +69,6 @@ const EventList = ({ events, userId }: EventListProps) => {
           </CardHeader>
           <CardContent>
             <p>{event.description}</p>
-            {event.userId}
           </CardContent>
           <CardFooter className="flex items-center justify-between">
             <div>User icon</div>
