@@ -22,8 +22,8 @@ import {
   HoverCard,
   HoverCardContent,
 } from "@/components/ui/hover-card";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type EventWithUser = Event & {
   user: User;
@@ -58,7 +58,10 @@ const EventList = ({ events, userId }: EventListProps) => {
   return (
     <div className="space-y-4 w-full sm:w-[640px]">
       {events.map((event) => (
-        <Card className="p-0 md:px-3 flex flex-col hover:shadow-xl hover:transition hover:delay-150 hover:duration-300">
+        <Card
+          className="p-0 md:px-3 flex flex-col hover:shadow-xl hover:transition hover:delay-150 hover:duration-300"
+          key={event.id}
+        >
           <CardHeader>
             <CardTitle className="items-center space-y-3">
               <div className="flex items-center text-xs text-muted-foreground space-x-2">
@@ -78,14 +81,13 @@ const EventList = ({ events, userId }: EventListProps) => {
                 <div>
                   <HoverCard>
                     <HoverCardTrigger asChild>
-                      <Image
-                        src={event.user.imageUrl}
-                        width={6}
-                        height={6}
-                        alt="user logo"
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white cursor-pointer hover:ring-primary ml-2"
-                        unoptimized
-                      />
+                      <Avatar className="cursor-pointer hover:ring-2 hover:ring-primary">
+                        <AvatarImage
+                          src={event.user.imageUrl}
+                          alt="avartar image"
+                        />
+                        <AvatarFallback>{event.user.name}</AvatarFallback>
+                      </Avatar>
                     </HoverCardTrigger>
                     <HoverCardContent className="w-auto">
                       <div className="flex items-center text-xs">
@@ -106,7 +108,6 @@ const EventList = ({ events, userId }: EventListProps) => {
                 <MapPin className="h-4 w-4" />
                 <div>{event.location}</div>
               </Badge>
-
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,8 +115,10 @@ const EventList = ({ events, userId }: EventListProps) => {
           </CardContent>
           <CardFooter className="flex items-center justify-between">
             <div>Attendant icon</div>
-            <Button className="before:ease relative overflow-hidden border border-primary bg-primary text-white shadow-sm transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-primary hover:before:-translate-x-40"
-              onClick={() => AttendEvent()}>
+            <Button
+              className="before:ease relative overflow-hidden border border-primary bg-primary text-white shadow-sm transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-primary hover:before:-translate-x-40"
+              onClick={() => AttendEvent()}
+            >
               <span className="relative z-10">Attend</span>
             </Button>
           </CardFooter>

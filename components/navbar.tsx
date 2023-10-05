@@ -3,10 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { UserButton, useAuth } from "@clerk/nextjs";
-import { Plus } from "lucide-react";
+import { CalendarHeart, HomeIcon, Plus } from "lucide-react";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import MobileNav from "@/components/mobile-nav";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,22 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { useEventModal } from "@/hooks/use-event-modal";
 
 const Navbar = () => {
+  const pathname = usePathname();
+  const routes = [
+    {
+      label: "Home",
+      href: `/`,
+      icon: HomeIcon,
+      active: pathname === `/`,
+    },
+    {
+      label: "My Events",
+      href: `/my-events`,
+      icon: CalendarHeart,
+      active: pathname === `/my-events`,
+    },
+  ];
+
   const { isSignedIn } = useAuth();
   const eventModal = useEventModal();
   const router = useRouter();
@@ -55,7 +71,7 @@ const Navbar = () => {
           <Image src="/logo.svg" width={100} height={50} alt="logo" />
         </div>
       </Link>
-      <div className="hidden md:inline-flex">
+      <div className="hidden md:inline-flex items-center space-x-3">
         <HoverCard>
           <HoverCardTrigger asChild>
             <Button
@@ -106,7 +122,7 @@ const Navbar = () => {
           <SheetTrigger>
             <Menu className="text-primary" />
           </SheetTrigger>
-          <MobileNav closeSheet={closeSheet} />
+          <MobileNav closeSheet={closeSheet} routes={routes} />
         </Sheet>
       </div>
     </div>

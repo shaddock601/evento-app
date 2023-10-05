@@ -4,6 +4,9 @@ import EventList from "../_components/event-list";
 
 export default async function Home() {
   const events = await prismadb.event.findMany({
+    orderBy: {
+      date: "asc",
+    },
     include: {
       user: true,
     },

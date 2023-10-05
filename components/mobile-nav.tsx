@@ -10,13 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "./ui/separator";
 import { useEventModal } from "@/hooks/use-event-modal";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   closeSheet: () => void;
+  routes: any;
 }
 
-const MobileNav = ({ closeSheet }: SidebarProps) => {
+const MobileNav = ({ closeSheet, routes }: SidebarProps) => {
+  const pathname = usePathname();
   const eventModal = useEventModal();
   const { isSignedIn } = useAuth();
   const router = useRouter();
@@ -46,7 +49,7 @@ const MobileNav = ({ closeSheet }: SidebarProps) => {
       <Separator />
       <div className="flex-grow">
         <Button
-          className="w-full my-4"
+          className="w-full mt-4 mb-7"
           onClick={() => {
             handleCreateEvent();
             closeSheet();
@@ -57,6 +60,25 @@ const MobileNav = ({ closeSheet }: SidebarProps) => {
             <Plus className="ml-2" />
           </div>
         </Button>
+        <Separator />
+        <div className="py-4 space-y-1">
+          {routes.map((route: any) => (
+            <Link
+              key={route.href}
+              href={route.href}
+              className={cn(
+                "text-sm group flex p-3 w-full justify-start font-bold cursor-pointer hover:text-primary rounded-lg transition duration-200",
+                pathname === route.href
+                  ? "text-primary bg-white/10"
+                  : "text-zinc-800"
+              )}
+              onClick={() => closeSheet()}
+            >
+              <route.icon className="h-5 w-5 mr-3" />
+              {route.label}
+            </Link>
+          ))}
+        </div>
       </div>
     </SheetContent>
   );
