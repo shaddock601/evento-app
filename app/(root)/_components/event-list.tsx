@@ -23,6 +23,7 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 type EventWithUser = Event & {
   user: User;
@@ -60,15 +61,15 @@ const EventList = ({ events, userId }: EventListProps) => {
         <Card className="p-0 md:px-3 flex flex-col hover:shadow-xl hover:transition hover:delay-150 hover:duration-300">
           <CardHeader>
             <CardTitle className="items-center space-y-3">
-              <div className="flex items-center text-xs text-muted-foreground space-x-3">
-                <div className="flex items-center">
+              <div className="flex items-center text-xs text-muted-foreground space-x-2">
+                <Badge variant="outline" className="flex items-center">
                   <Calendar className="h-4 w-4 mr-1" />
                   <p>{event.date.toDateString()}</p>
-                </div>
-                <div className="flex items-center">
+                </Badge>
+                <Badge variant="outline" className="flex items-center">
                   <Clock className="h-4 w-4 mr-1" />
                   <p>{event.date.toLocaleTimeString()}</p>
-                </div>
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <div className="cursor-pointer font-bold font-sans hover:text-primary">
@@ -101,8 +102,11 @@ const EventList = ({ events, userId }: EventListProps) => {
               </div>
             </CardTitle>
             <CardDescription className="flex items-center py-2">
-              <MapPin />
-              <div>{event.location}</div>
+              <Badge className="px-2 bg-primary cursor-pointer">
+                <MapPin className="h-4 w-4" />
+                <div>{event.location}</div>
+              </Badge>
+
             </CardDescription>
           </CardHeader>
           <CardContent>
