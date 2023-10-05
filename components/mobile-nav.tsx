@@ -69,8 +69,8 @@ const MobileNav = ({ closeSheet, routes }: SidebarProps) => {
               className={cn(
                 "text-sm group flex p-3 w-full justify-start font-bold cursor-pointer hover:text-primary rounded-lg transition duration-200",
                 pathname === route.href
-                  ? "text-primary bg-white/10"
-                  : "text-zinc-800"
+                  ? "text-primary bg-secondary"
+                  : "text-zinc-700 dark:text-white"
               )}
               onClick={() => closeSheet()}
             >
