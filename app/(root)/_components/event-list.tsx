@@ -1,9 +1,7 @@
 "use client";
 
-import axios from "axios";
-import Image from "next/image";
 import toast from "react-hot-toast";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -59,7 +57,7 @@ const EventList = ({ events, userId }: EventListProps) => {
     <div className="space-y-4 w-full sm:w-[640px]">
       {events.map((event) => (
         <Card
-          className="p-0 md:px-3 flex flex-col hover:shadow-xl hover:transition hover:delay-150 hover:duration-300"
+          className="p-0 md:px-3 flex flex-col duration-300 hover:-translate-y-1 hover:shadow-lg group cursor-pointer"
           key={event.id}
         >
           <CardHeader>
@@ -75,8 +73,9 @@ const EventList = ({ events, userId }: EventListProps) => {
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <div className="cursor-pointer font-bold font-sans hover:text-primary">
+                <div className="flex items-center font-bold font-sans group-hover:text-primary duration-200 delay-75">
                   {event.name}
+                  <ArrowRight className="ml-2 transition-transform ease-in-out duration-300 transform -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0" />
                 </div>
                 <div>
                   <HoverCard>
