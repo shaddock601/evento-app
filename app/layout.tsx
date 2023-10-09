@@ -26,7 +26,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system">
             <ModalProvider />
             <ToastProvider />
-            <NextTopLoader color="#e11d48" />
+            <NextTopLoader color="#e11d48" showSpinner={false} />
             {children}
           </ThemeProvider>
         </body>

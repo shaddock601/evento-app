@@ -1,6 +1,7 @@
 "use client";
 
 import toast from "react-hot-toast";
+import Link from "next/link";
 import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -59,6 +60,7 @@ const EventList = ({ events, userId }: EventListProps) => {
         <Card
           className="p-0 md:px-3 flex flex-col duration-300 hover:-translate-y-1 hover:shadow-lg group cursor-pointer"
           key={event.id}
+          onClick={() => router.push(`/${event.id}`)}
         >
           <CardHeader>
             <CardTitle className="items-center space-y-3">
@@ -116,7 +118,10 @@ const EventList = ({ events, userId }: EventListProps) => {
             <div>Attendant icon</div>
             <Button
               className="before:ease relative overflow-hidden border border-primary bg-primary text-white shadow-sm transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-primary hover:before:-translate-x-40"
-              onClick={() => AttendEvent()}
+              onClick={(e) => {
+                e.stopPropagation();
+                AttendEvent();
+              }}
             >
               <span className="relative z-10">Attend</span>
             </Button>

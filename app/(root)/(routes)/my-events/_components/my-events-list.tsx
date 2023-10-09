@@ -1,5 +1,11 @@
 "use client";
 
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import TooltipButton from "@/components/tooltip-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -9,10 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { User, Event } from "@prisma/client";
-import { ArrowRight, ArrowRightCircle, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, MapPin, Pencil, Trash } from "lucide-react";
 
 type EventWithUser = Event & {
   user: User;
@@ -24,7 +28,24 @@ interface EventListProps {
 }
 
 const MyEventsList = ({ events, userId }: EventListProps) => {
+  const router = useRouter();
+
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async (id: string) => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/events/${id}`);
+      toast.success("Event deleted");
+    } catch (error: any) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      router.refresh();
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -56,6 +77,24 @@ const MyEventsList = ({ events, userId }: EventListProps) => {
               <MapPin className="h-4 w-4" />
               {event.location}
             </Badge>
+            <div className="flex ml-auto space-x-2">
+              <TooltipButton
+                onClick={() => handleDelete(event.id)}
+                tooltipText="Edit this event"
+                icon={<Pencil className="h-4 w-4" />}
+                variant="outline"
+                disabled={loading}
+                hoverColor="hover:bg-[#1de1b6]"
+              />
+              <TooltipButton
+                onClick={() => handleDelete(event.id)}
+                tooltipText="Delete this event"
+                icon={<Trash className="h-4 w-4" />}
+                variant="outline"
+                disabled={loading}
+                hoverColor="hover:bg-primary"
+              />
+            </div>
           </CardFooter>
         </Card>
       ))}
