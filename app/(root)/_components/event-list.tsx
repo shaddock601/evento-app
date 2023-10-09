@@ -71,7 +71,7 @@ const EventList = ({ events, userId }: EventListProps) => {
                 </Badge>
                 <Badge variant="outline" className="flex items-center">
                   <Clock className="h-4 w-4 mr-1" />
-                  <p>{event.date.toLocaleTimeString()}</p>
+                  <p>{new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </Badge>
               </div>
               <div className="flex items-center justify-between">

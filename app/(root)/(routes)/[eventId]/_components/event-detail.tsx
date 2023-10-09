@@ -1,17 +1,28 @@
 "use client";
 
+import { Calendar, Clock, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Event, User } from "@prisma/client";
-import { Calendar, Clock, MapPin } from "lucide-react";
 
 interface EventProps {
   event: Event & { user: User };
 }
 
 const EventDetail = ({ event }: EventProps) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div className="w-full sm:w-[640px]">
       <Card className="shadow-xl">
@@ -32,7 +43,7 @@ const EventDetail = ({ event }: EventProps) => {
             </div>
           </CardTitle>
           <CardDescription className="space-x-1 pt-4">
-            <Badge>
+            <Badge className="cursor-pointer">
               <MapPin className="h-4 w-4" />
               {event.location}
             </Badge>
@@ -42,7 +53,7 @@ const EventDetail = ({ event }: EventProps) => {
             </Badge>
             <Badge variant="outline">
               <Clock className="h-4 w-4" />
-              {event.date.toLocaleTimeString()}
+              {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Badge>
           </CardDescription>
         </CardHeader>
