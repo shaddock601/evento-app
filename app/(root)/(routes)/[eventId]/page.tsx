@@ -16,7 +16,11 @@ const EventPage = async ({ params }: { params: { eventId: string } }) => {
     redirect("/not-found");
   }
 
-  return <EventDetail event={event} />;
+  return (
+    <div className="flex flex-col justify-center items-center py-6 px-3">
+      <EventDetail event={event} />
+    </div>
+  )
 };
 
 export default EventPage;
