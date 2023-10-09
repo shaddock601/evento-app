@@ -18,6 +18,8 @@ import {
 import { User, Event } from "@prisma/client";
 import { ArrowRight, Calendar, Clock, MapPin, Pencil, Trash } from "lucide-react";
 import AlertModal from "@/components/modals/alert-modal";
+import { useAuth } from "@clerk/nextjs";
+import { useEventModal } from "@/hooks/use-event-modal";
 
 type EventWithUser = Event & {
   user: User;
@@ -30,6 +32,9 @@ interface EventListProps {
 
 const MyEventsList = ({ events, userId }: EventListProps) => {
   const router = useRouter();
+  const eventModal = useEventModal();
+
+  const { isSignedIn } = useAuth();
 
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,8 +56,13 @@ const MyEventsList = ({ events, userId }: EventListProps) => {
     }
   };
 
-  const handleEdit = (id: string) => {
-    console.log(id)
+  const handleEdit = (event: EventWithUser) => {
+    if (isSignedIn) {
+      eventModal.onOpen();
+      eventModal.setModeAndEvent("update", event);
+    } else {
+      router.push("/sign-in");
+    }
   }
 
   useEffect(() => {
@@ -103,7 +113,7 @@ const MyEventsList = ({ events, userId }: EventListProps) => {
                 <TooltipButton
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    handleEdit(event.id)
+                    handleEdit(event);
                   }}
                   tooltipText="Edit this event"
                   icon={<Pencil className="h-4 w-4" />}

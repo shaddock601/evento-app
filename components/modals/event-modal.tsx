@@ -5,7 +5,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useEventModal } from "@/hooks/use-event-modal";
 import { Modal } from "@/components/ui/modal";
@@ -28,7 +29,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "../date-picker";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -42,21 +42,39 @@ const EventModal = () => {
   const eventModal = useEventModal();
   const router = useRouter();
 
+  const { mode, eventToUpdate } = eventModal;
+
   const [loading, setLoading] = useState(false);
   const [isLimit, setIsLimit] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const defaultFormValues = {
+    name: "",
+    description: "",
+    location: "",
+    is_limit: false,
+    max_people: 0,
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      location: "",
-      is_limit: false,
-      max_people: 0,
-    },
+    defaultValues: defaultFormValues,
   });
 
+  useEffect(() => {
+    if (mode === "update" && eventToUpdate) {
+      // If in update mode and there's an event to update, set default values
+      form.reset({
+        name: eventToUpdate.name || "",
+        description: eventToUpdate.description || "",
+        location: eventToUpdate.location || "",
+        is_limit: eventToUpdate.is_limit || false,
+        max_people: eventToUpdate.max_people || 0,
+      });
+    }
+  }, [eventToUpdate, mode, form]);
+
+  //TODO: Check is limit if it true the input show Yes if it false show No (According to variables)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
@@ -65,13 +83,22 @@ const EventModal = () => {
         ...values,
       };
 
-      await axios.post(`/api/events`, data);
-      toast.success("Event created");
+      if (mode === "create") {
+        await axios.post(`/api/events`, data);
+        toast.success("Event created");
+
+      } else if (mode === "update") {
+        await axios.put(`/api/events/${eventToUpdate?.id}`, data)
+        toast.success("Event updated");
+      }
+
     } catch (error: any) {
       toast.error("Something went wrong!", error);
     } finally {
       setLoading(false);
       form.reset();
+      setIsLimit(false);
+      setCurrentDate(new Date());
       eventModal.onClose();
       router.refresh();
     }
@@ -89,8 +116,8 @@ const EventModal = () => {
 
   return (
     <Modal
-      title="Create Event"
-      description="Add your event to share with others."
+      title={mode === "create" ? "Create Event" : "Edit Event"}
+      description={mode === "create" ? "Add your event to share with others." : "Edit your event."}
       isOpen={eventModal.isOpen}
       onClose={eventModal.onClose}
     >
@@ -227,7 +254,7 @@ const EventModal = () => {
             </div>
             <div className="grid grid-cols-1 gap-y-3 items-center mt-3 sm:flex sm:justify-end sm:space-x-3">
               <Button disabled={loading} type="submit">
-                Create
+                {mode === "create" ? "Create" : "Update"}
               </Button>
               <Button
                 disabled={loading}

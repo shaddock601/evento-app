@@ -5,7 +5,6 @@ import Image from "next/image";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import {
   CalendarHeart,
-  ChevronRightSquare,
   HomeIcon,
   Plus,
 } from "lucide-react";
@@ -28,7 +27,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -94,6 +92,7 @@ const Navbar = () => {
   const handleCreateEvent = () => {
     if (isSignedIn) {
       eventModal.onOpen();
+      eventModal.setModeAndEvent("create");
     } else {
       router.push("/sign-in");
     }
